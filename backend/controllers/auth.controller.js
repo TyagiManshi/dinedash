@@ -1,5 +1,5 @@
 import User from "../models/user.model.js"
-import bcyptjs from "bcryptjs"
+import bcryptjs from "bcryptjs"
 import genToken from "../utils/token.js"
 import cookieParser from "cookie-parser"
 
@@ -7,18 +7,18 @@ export const signUp = async(req, res) => {
     try {
         
         const {fullName, email, password, mobile, role } = req.body
-        const user = await User.findOne({email})
+        let user = await User.findOne({email})
         if(user){
-            return res.status(400).json({message:"User already exists."})
+            return res.status(400).json({error:"User already exists."})
         }
         if(password.length < 6){
             return res.status(400).json({message:"Password must contain at least 6 characters."})
         }
-        if(mobile.length < 10){
+        if(!/^\d{10}$/.test(mobile)){
             return res.status(400).json({message:"Mobile number must contain 10 digits."})
         }
 
-        const hashedPassword = await bcyptjs.hash(password, 10)
+        const hashedPassword = await bcryptjs.hash(password, 10)
         user = await User.create({
             fullName,
             email,
@@ -51,7 +51,7 @@ export const signIn = async(req, res) => {
             return res.status(400).json({message:"User does not exist."})
         }
 
-        const isMatch = await bcyptjs.compare(password, user.password)
+        const isMatch = await bcryptjs.compare(password, user.password)
 
         if(!isMatch){
             return res.status(400).json({message: "Incorrect Password."})
