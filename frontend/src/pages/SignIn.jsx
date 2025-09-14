@@ -91,6 +91,10 @@ const SignIn = () => {
           </div>
         </div>
 
+        <div className="text-right cursor-pointer mb-4 text-[#ff4d2d]" onClick={()=>navigate('/forgot-password')}>
+            Forgot Password
+        </div>
+
         <button
           className={`w-full font-semibold rounded-lg py-2 transition duration-200 bg-[#fc4323] text-white hover:bg-[#f12800] cursor-pointer`}
         onClick={handleSignin}
